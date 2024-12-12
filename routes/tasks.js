@@ -1,44 +1,31 @@
+// Import express from express library
 import express from 'express';
- import task from '../models/task.js';
-import  sequelize  from '../config/dbconn.js';
-
+// Importing the functions I made
+import Task from '../models/task.js';
+import sequelize from '../config/dbconn.js';
+// Declare router as the express router function
 const router = express.Router();
-
-sequelize.authenticate();
-/**
- * Retrieves all tasks from the database.
- * @route GET /
- * @param {Object} req - Express request object.
- * @param {Object} res - Express response object.
- * @returns {Object} JSON response with all tasks or error message.
- */
+//Get all tasks
 router.get('/', async (req, res) => {
-
-  try {
-    // add sequilze connetion 
-    const tasks = await task.find();
-    res.status(200).json(tasks);
-
-  } catch (error) {
-
-    console.error(error.message);
-    const text = error.message;
-    res.status(500).json({ message: text });
-
-  }
+    try {
+        await sequelize.authenticate();
+        await sequelize.sync();
+        //Declare 'tasks' as all of the tasks in task.js or "Task"
+        const tasks = await Task.findAll();
+        res.render('index', { tasks }); //respond with that
+    }
+    //If an error is caught then console the error
+    catch (error){
+        res.status(500).json({message: text});
+    }
 });
-
-
-router.post('/', async (req, res) => {
-  const newTask = new task(req.body);
-
-  try {
-    const savedTask = await newTask.save();
-    res.status(201).json(savedTask);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
+router.post('/tasks', async (req, res) => {
+    try {
+        const task = await Task.create(req.body);
+        res.status(201).json(task);
+    }
+    catch(error){
+        res.status(400).json({ error: error.message});
+    }
 });
-
-export default  router;
-// Update a task
+export default router;
