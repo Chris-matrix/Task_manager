@@ -1,21 +1,26 @@
-import express  from 'express';
+import express from 'express';
 import taskRoutes from './routes/tasks.js';
 
 const app = express();
 
+// Serve static files from the "public" directory
 app.use(express.static('public'));
+
+// Parse incoming JSON requests
 app.use(express.json());
 
-app.use("veiws engine", 'ejs');
+// Set the view engine to EJS
+app.set('view engine', 'ejs');
 
-app.use("veiws ","/veiws");
+// Set the views directory
+app.set('views', './views');
 
+// Use task routes
 app.use('/task', taskRoutes);
 
+const PORT = process.env.PORT || 3000;
 
-
-const port = process.env.PORT ||3000;
-
-app.listen(port, () => {
-    console.log(`Server is running on port https://localhost: ${port}`);
+// Start the server
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
 });

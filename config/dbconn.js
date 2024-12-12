@@ -1,5 +1,6 @@
 import {Sequelize}  from 'sequelize';
-import 'dotenv/config';
+import dotenv from 'dotenv';
+dotenv.config()
 
 // add squelize connection
 const squelizeConnection = new Sequelize(
@@ -8,7 +9,8 @@ const squelizeConnection = new Sequelize(
     process.env.DB_PASSWORD,
     {
         host: process.env.DB_HOST,
-        dialect: 'postgres',
+        dialect: 'mysql',
+        port: process.env.DB_PORT,
     })
     
     console.log("Database::connectioned",true);

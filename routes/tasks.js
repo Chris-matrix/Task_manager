@@ -1,10 +1,10 @@
 import express from 'express';
-// import task from '../models/task.js';
-// import  sequelize  from '../config/dbconn.js';
+ import task from '../models/task.js';
+import  sequelize  from '../config/dbconn.js';
 
 const router = express.Router();
 
-// sequelize.authenticate();
+sequelize.authenticate();
 /**
  * Retrieves all tasks from the database.
  * @route GET /
