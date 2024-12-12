@@ -1,19 +1,28 @@
-//importing from libraries
 import express from 'express';
-import path from 'path';
 import taskRoutes from './routes/tasks.js';
-//declares the express function as app
+import sequelizeConnection, { connectDB } from './config/config.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
-//tells the app to read it in ejs
-app.set('view engine', 'ejs');
-//tells the app which file to read
-app.set('views', './views');
-//tells the app to use express.json
+
 app.use(express.json());
-//tells the app to use the static folder
-app.use('/', taskRoutes);
-//consoles the server
-const PORT = process.env.PORT || 3001;
+app.use(express.urlencoded({ extended: true })); // Parse form data
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Serve static files
+app.use(express.static('public'));
+
+// Register routes
+app.use('/api', taskRoutes);
+
+const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
-    console.log(`server is running on port http://localhost:${PORT}`);
+  console.log(`Server is running on port http://localhost:${PORT}`);
 });
